@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-job:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.determine-env.outputs.environment }}
+    steps:
+    - name: Determine Environment
+      id: determine-env
+      run: |
+        echo "::set-output name=environment::development"
+
+  reusable-job:
+    needs: setup-job
+    uses: ./.github/workflows/reusable-workflow.yml
+    with:
+      config-path: '.github/terraform-config.yml'
+      environment: ${{ needs.setup-job.outputs.environment }}
+    secrets:
+      personal_access_token: ${{ secrets.GITHUB_TOKEN }}
