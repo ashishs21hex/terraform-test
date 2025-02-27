@@ -29,9 +29,11 @@ jobs:
         terraform_version: 1.5.6
 
     - name: Terraform Init
+      working-directory: ./terraform # Ensure this matches the directory where your Terraform files are
       run: terraform init
 
     - name: Terraform Apply
+      working-directory: ./terraform # Ensure this matches the directory where your Terraform files are
       env:
         TF_VAR_environment: ${{ inputs.environment }}
       run: terraform apply -auto-approve
